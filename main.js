@@ -1,21 +1,17 @@
-var Harvester       = require('role.harvester');
-var CreateCreeps    = require('population');
-var Upgrader        = require('role.upgrader');
+const Population = require("Population");
+const Harvester = require("role.harvester");
+module.exports.loop = () => {
+  const population = new Population();
 
-module.exports.loop = function(){
-    
-    //CreateCreeps.run();
-    //Game.creeps['Harvester1'].memory.role = 'Harvester';
-    //Game.creeps['Harvester2'].memory.role = 'Harvester';
-    //Game.creeps['Upgrader1'].memory.role = 'Upgrader';
-    
-    
-    for(var name in Game.creeps){
-        var creep = Game.creeps[name];
-        if(creep.memory.role == 'Harvester')
-            Harvester.run(creep);
-        if(creep.memory.role == 'Upgrader')
-            Upgrader.run(creep);
+  population.add();
+  // population.info();
+
+  for (let name in Game.creeps) {
+    const creep = Game.creeps[name];
+
+    switch (creep.memory.role) {
+      case "Harvester":
+        Harvester.run(creep);
     }
-    
-}
+  }
+};

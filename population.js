@@ -1,22 +1,30 @@
-var PopulationHandler = {
-    run: function(){
-        
-        
-     /*if(Game.spawns['Spawn1'].energy > 0){
-        Game.spawns['Spawn1'].createCreep([WORK,CARRY,MOVE],'Harvester3');
-        }
-    */
-    
-    var myCreeps = [];
-        for(var name in Game.creeps){
-            myCreeps.push(name);
-        }
-    
-    console.log("Our colony excists of " + myCreeps.length + " creeps named: ");
-        for(var x = 0; x < myCreeps.length; x++){
-            console.log(myCreeps[x]);
-        }
-    }
-};
+const Harvester = require("role.harvester");
+const WorkerName = require("workername");
 
-module.exports = PopulationHandler;
+class Population {
+  /**
+   * Add screep to the first spawn, if enough energyis present
+   */
+  add() {
+    const spawnKey = Object.keys(Game.spawns)[0];
+    const spawn = Game.spawns[spawnKey];
+
+    if (spawn.store[RESOURCE_ENERGY] > 0) {
+      const name = WorkerName.getFreeName(Object.keys(Game.creeps) || []);
+      spawn.spawnCreep([WORK, CARRY, MOVE], name, {
+        memory: { role: "Harvester" },
+      });
+      Game.notify(`${name} has been created, and has been assigned: harvester`);
+    }
+  }
+
+  /**
+   * Print info about current population
+   */
+  info() {
+    console.log("Population info:");
+    Object.keys(Game.creeps).forEach((creep) => console.log(`-> ${creep}`));
+  }
+}
+
+module.exports = Population;
